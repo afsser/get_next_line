@@ -6,7 +6,7 @@
 /*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 17:38:32 by mdias             #+#    #+#             */
-/*   Updated: 2023/08/24 20:07:35 by fcaldas-         ###   ########.fr       */
+/*   Updated: 2023/08/24 20:07:57 by fcaldas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char	*get_next_line(int fd)
 	while (!ft_strchr(buffer, '\n'))
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
-		// if (!rd)
-		// 	return (0);
+		if (!rd)
+			return (0);
 		blend = ft_strjoin(blend, buffer);
 		if (rd < BUFFER_SIZE)
 			return (buffer);
