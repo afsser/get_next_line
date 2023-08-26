@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipenasser <felipenasser@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 17:38:32 by mdias             #+#    #+#             */
-/*   Updated: 2023/08/24 20:07:57 by fcaldas-         ###   ########.fr       */
+/*   Created: 2023/08/25 16:21:32 by felipenasse       #+#    #+#             */
+/*   Updated: 2023/08/25 20:59:51 by felipenasse      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,50 @@
 
 char	*get_next_line(int fd)
 {
-	char		*buffer;
-	int			rd;
-	char		*blend;
 	static char	*remains;
+	char		*buffer;
+	char		*blend;
+	int			rd;
 
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
-	if (!buffer)
-		return (NULL);
-	// rd = 1;
-	// rd = read(fd, buffer, BUFFER_SIZE);
-	blend = malloc(0);
+	blend = (char *)ft_calloc(1, 1);
 	if (remains)
+    {
 		blend = ft_strjoin(blend, remains);
-	while (!ft_strchr(buffer, '\n'))
+        free(remains);
+        remains = NULL;
+    }
+    rd = BUFFER_SIZE;
+	while (!ft_strchr(buffer, '\n') && rd == BUFFER_SIZE)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if (!rd)
-			return (0);
-		blend = ft_strjoin(blend, buffer);
-		if (rd < BUFFER_SIZE)
-			return (buffer);
+        if (rd > 0)
+		{
+		    blend = ft_strjoin(blend, buffer);
+		}
 	}
-	if (ft_strchr(blend, '\n'))
+	if (*buffer && rd)
 	{
-		buffer = blend;
-		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
-		blend[ft_strlen(blend) - ft_strlen(ft_strchr(blend, '\n')) + 1] = '\0';
-		blend = ft_strdup(blend);
+        if (rd == BUFFER_SIZE)
+        {
+		    buffer = blend;
+		    remains = ft_strdup(ft_strchr(blend, '\n') + 1);
+		    blend = ft_calloc(ft_strlen(buffer) - ft_strlen(remains) + 1, sizeof(char));
+		    ft_strlcpy(blend, buffer, ft_strlen(buffer) - ft_strlen(remains) + 1);
+        }
+		else if (rd < BUFFER_SIZE)
+		{
+			return (NULL);
+		}
 		free(buffer);
 		buffer = NULL;
 		return (blend);
 	}
-	else if (!*buffer)
-	{
-		free(remains);
-		remains = NULL;
-		return (blend);
-	}
-	else if (rd == 1 || rd == 0)
-		return (0);
-	return (0);
+	free(buffer);
+	free(blend);
+	buffer = NULL;
+	blend = NULL;
+	return (NULL);
 }
 
 #include <fcntl.h>
@@ -68,21 +71,10 @@ int	main(void)
 
 	fd = open("file.txt", O_RDONLY);
 	i = 0;
-	while (i < 66)
+	while (i < 200)
 	{
 		s = get_next_line(fd);
 		printf("%s", s);
 		i++;
-		free(s);
 	}
-	// close(fd);
 }
-/*
-cccccccccccccccccccc
-.
-xxxxxxxxxxxxxxxx
-rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-00000000000000000000000000000
-222222222222222
-999999999999999
-*/

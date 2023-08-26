@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipenasser <felipenasser@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 17:39:02 by mdias             #+#    #+#             */
-/*   Updated: 2023/08/24 19:45:04 by fcaldas-         ###   ########.fr       */
+/*   Updated: 2023/08/25 14:43:43 by felipenasse      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (size == 0)
+	{
+		while (src[i] != '\0')
+			i++;
+		return (i);
+	}
+	while (i < size - 1 && src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (i < size)
+		dst[i] = '\0';
+	while (src[i] != '\0')
+		i++;
+	return (i);
+}
 
 size_t	ft_strlen(const char *str)
 {
@@ -45,28 +68,6 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 		return (src_len + dst_len);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	if (size == 0)
-	{
-		while (src[i] != '\0')
-			i++;
-		return (i);
-	}
-	while (i < size - 1 && src[i] != '\0')
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (i < size)
-		dst[i] = '\0';
-	while (src[i] != '\0')
-		i++;
-	return (i);
-}
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
