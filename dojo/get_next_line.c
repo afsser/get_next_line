@@ -6,7 +6,7 @@
 /*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 16:21:32 by felipenasse       #+#    #+#             */
-/*   Updated: 2023/08/30 16:50:06 by fcaldas-         ###   ########.fr       */
+/*   Updated: 2023/08/30 17:47:05 by fcaldas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,17 +164,20 @@ char	*get_next_line(int fd)
 		rd = read(fd, buffer, BUFFER_SIZE);
 		blend = ft_strjoin(blend, buffer);
 	}
+	free(buffer);
+	buffer = NULL;
+	if (rd < BUFFER_SIZE && rd > 0)
+	{
+		return (blend);
+	}
     if (rd == BUFFER_SIZE)
 	{
 		buffer = blend;
 		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
 		blend = ft_calloc(ft_strlen(buffer) - ft_strlen(remains) + 1, sizeof(char));
 		ft_strlcpy(blend, buffer, ft_strlen(buffer) - ft_strlen(remains) + 1);
-	}
-	free(buffer);
-	buffer = NULL;
-	if (remains)
-	{
+		free(buffer);
+		buffer = NULL;
 		return (blend);
 	}
 	free(blend);
@@ -191,9 +194,9 @@ int	main(void)
 	int		fd;
 	char	*s;
 
-	fd = open("file.txt", O_RDONLY);
+	fd = open("gpt.txt", O_RDONLY);
 	i = 0;
-	while (i < 200)
+	while (i < 10)
 	{
 		s = get_next_line(fd);
 		printf("%s", s);
