@@ -25,28 +25,28 @@ coco
 
 ...........Ç
 
-Em outras palavras, você declarou a variável int rd;,
+1-Em outras palavras, você declarou a variável int rd;,
 mas não a utilizou em nenhuma operação ou expressão após essa declaração.
 Isso é o que está causando o aviso de variável não utilizada.
 Se você não tem a intenção de usar a variável rd mais tarde no código,
 você pode simplesmente removê-la para evitar esse aviso.
 Se você pretende usá-la mais adiante, certifique-se de fazer isso para evitar esse aviso durante a compilação.
 
-Em outras palavras, você declarou a variável int rd;,
+2-Em outras palavras, você declarou a variável int rd;,
 mas não a utilizou em nenhuma operação ou expressão após essa declaração.
 Isso é o que está causando o aviso de variável não utilizada.
 Se você não tem a intenção de usar a variável rd mais tarde no código,
 você pode simplesmente removê-la para evitar esse aviso.
 Se você pretende usá-la mais adiante, certifique-se de fazer isso para evitar esse aviso durante a compilação.
 
-Em outras palavras, você declarou a variável int rd;,
+3-Em outras palavras, você declarou a variável int rd;,
 mas não a utilizou em nenhuma operação ou expressão após essa declaração.
 Isso é o que está causando o aviso de variável não utilizada.
 Se você não tem a intenção de usar a variável rd mais tarde no código,
 você pode simplesmente removê-la para evitar esse aviso.
 Se você pretende usá-la mais adiante, certifique-se de fazer isso para evitar esse aviso durante a compilação.
 
-Em outras palavras, você declarou a variável int rd;,
+4-Em outras palavras, você declarou a variável int rd;,
 mas não a utilizou em nenhuma operação ou expressão após essa declaração.
 Isso é o que está causando o aviso de variável não utilizada.
 Se você não tem a intenção de usar a variável rd mais tarde no código,

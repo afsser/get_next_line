@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 16:21:32 by felipenasse       #+#    #+#             */
-/*   Updated: 2023/08/30 17:47:05 by fcaldas-         ###   ########.fr       */
+/*   Updated: 2023/08/31 00:41:11 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 3
+#  define BUFFER_SIZE 2
 # endif
 
 // #include "get_next_line.h"
@@ -150,8 +150,10 @@ char	*get_next_line(int fd)
 	char		*blend;
 	int			rd;
 
+	if (!BUFFER_SIZE || fd < 0)
+		return (NULL);
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
-	blend = (char *)ft_calloc(1, 1);
+	blend = ft_strdup("");
 	if (remains)
     {
 		blend = ft_strjoin(blend, remains);
@@ -159,27 +161,26 @@ char	*get_next_line(int fd)
         remains = NULL;
     }
     rd = BUFFER_SIZE;
-	while (!ft_strchr(buffer, '\n') && rd == BUFFER_SIZE)
+	while (!ft_strchr(blend, '\n') && rd == BUFFER_SIZE)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
 		blend = ft_strjoin(blend, buffer);
 	}
-	free(buffer);
-	buffer = NULL;
-	if (rd < BUFFER_SIZE && rd > 0)
-	{
-		return (blend);
-	}
-    if (rd == BUFFER_SIZE)
+    if (rd)
 	{
 		buffer = blend;
 		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
 		blend = ft_calloc(ft_strlen(buffer) - ft_strlen(remains) + 1, sizeof(char));
+		// blend[ft_strlen(buffer) - ft_strlen(remains)] = '\0';
 		ft_strlcpy(blend, buffer, ft_strlen(buffer) - ft_strlen(remains) + 1);
 		free(buffer);
 		buffer = NULL;
 		return (blend);
 	}
+	free(remains);
+	remains = NULL;
+	free(buffer);
+	buffer = NULL;	
 	free(blend);
 	blend = NULL;
 	return (NULL);
@@ -194,12 +195,20 @@ int	main(void)
 	int		fd;
 	char	*s;
 
-	fd = open("gpt.txt", O_RDONLY);
+	fd = open("file.txt", O_RDONLY);
 	i = 0;
-	while (i < 10)
+	while (i < 100)
 	{
 		s = get_next_line(fd);
 		printf("%s", s);
 		i++;
 	}
+	// fd = open("gpt.txt", O_RDONLY);
+	// i = 0;
+	// while (i < 23)
+	// {
+	// 	s = get_next_line(fd);
+	// 	printf("%s", s);
+	// 	i++;
+	// }
 }
