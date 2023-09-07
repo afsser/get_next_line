@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fcaldas- <fcaldas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 15:26:05 by fcaldas-          #+#    #+#             */
-/*   Updated: 2023/09/06 19:22:19 by nasser           ###   ########.fr       */
+/*   Updated: 2023/09/07 19:03:35 by fcaldas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	else
 		return (src_len + dst_len);
 }
-
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
