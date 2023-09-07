@@ -6,7 +6,7 @@
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 16:21:32 by felipenasse       #+#    #+#             */
-/*   Updated: 2023/09/06 20:59:44 by nasser           ###   ########.fr       */
+/*   Updated: 2023/09/07 05:56:21 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 3
 # endif
 
 // #include "get_next_line.h"
@@ -167,6 +167,7 @@ char	*ft_strjoin(char *left_str, char *buff)
 		str[i++] = buff[j++];
 	str[ft_strlen(left_str) + ft_strlen(buff)] = '\0';
 	free(left_str);
+	left_str = NULL;
 	return (str);
 }
 
@@ -221,15 +222,21 @@ char	*get_next_line(int fd)
 	}
 	if (ft_strchr(blend, '\n'))
 	{
+		free(buffer);   //----- esse aqui
 		buffer = blend;
 		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
 		blend = ft_calloc(ft_strlen(buffer) - ft_strlen(remains) + 1, sizeof(char));
 		ft_strlcpy(blend, buffer, ft_strlen(buffer) - ft_strlen(remains) + 1);
-		free(buffer);
-		buffer = NULL;
+	    if (buffer == blend)
+        	buffer = NULL;
+		else
+		{
+			free(buffer);
+			buffer = NULL;
+    	}
 		return (blend);
 	}
-	else if (ft_strlen(blend) && rd == 0)
+	else if (ft_strlen(blend) && rd >= 0 && rd < BUFFER_SIZE)
 	{
 		free(buffer);
 		buffer = NULL;
@@ -254,9 +261,9 @@ int	main(void)
 	int		fd;
 	char	*s;
 
-	fd = open("gpt.txt", O_RDONLY);
+	fd = open("file.txt", O_RDONLY);
 	i = 0;
-	while (i < 30)
+	while (i < 74)
 	{
 		s = get_next_line(fd);
 		printf("%s", s);
@@ -264,10 +271,13 @@ int	main(void)
 		// s = NULL;
 		i++;
 	}
+	return (0);
 }
 	// SOBRANDO 3 BYTES POR LINHA, SEMPRE.
 	// NOVAS CHAMADAS DEPOIS DE ACABAR NAO GERA MAIS LEAK
-	// AUMENTAR BUFFER AUMENTA LEAK, 1 BUFFER AUMENTA 3 LEAK
+	// AUMENTAR BUFFER AUMENTA LEAK, 1 BUFFER AUMENTA 1 LEAK POR GNL
+	// 
+	// CADA GNL = 3LEAKS BASE; +1 LEAK PRA CADA +1 BUFFER_SIZE;
 
 	// fd = open("gpt.txt", O_RDONLY);
 	// i = 0;

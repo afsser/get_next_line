@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/25 16:21:32 by felipenasse       #+#    #+#             */
-/*   Updated: 2023/08/31 00:41:11 by nasser           ###   ########.fr       */
+/*   Created: 2023/08/15 15:26:05 by fcaldas-          #+#    #+#             */
+/*   Updated: 2023/09/06 19:22:19 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdlib.h>
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 2
-# endif
-
-// #include "get_next_line.h"
+#include "get_next_line.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
@@ -82,7 +75,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	size_str;
 
 	size_str = ft_strlen(s1) + ft_strlen(s2) + 1;
-	concatd_str = (char *)malloc(size_str);
+	concatd_str = (char *)ft_calloc(size_str, sizeof(char));
 	if (!concatd_str)
 		return (NULL);
 	ft_strlcpy(concatd_str, s1, size_str);
@@ -141,74 +134,4 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		i++;
 	}
 	return (dest);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*remains;
-	char		*buffer;
-	char		*blend;
-	int			rd;
-
-	if (!BUFFER_SIZE || fd < 0)
-		return (NULL);
-	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
-	blend = ft_strdup("");
-	if (remains)
-    {
-		blend = ft_strjoin(blend, remains);
-        free(remains);
-        remains = NULL;
-    }
-    rd = BUFFER_SIZE;
-	while (!ft_strchr(blend, '\n') && rd == BUFFER_SIZE)
-	{
-		rd = read(fd, buffer, BUFFER_SIZE);
-		blend = ft_strjoin(blend, buffer);
-	}
-    if (rd)
-	{
-		buffer = blend;
-		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
-		blend = ft_calloc(ft_strlen(buffer) - ft_strlen(remains) + 1, sizeof(char));
-		// blend[ft_strlen(buffer) - ft_strlen(remains)] = '\0';
-		ft_strlcpy(blend, buffer, ft_strlen(buffer) - ft_strlen(remains) + 1);
-		free(buffer);
-		buffer = NULL;
-		return (blend);
-	}
-	free(remains);
-	remains = NULL;
-	free(buffer);
-	buffer = NULL;	
-	free(blend);
-	blend = NULL;
-	return (NULL);
-}
-
-#include <fcntl.h>
-#include <stdio.h>
-
-int	main(void)
-{
-	int		i;
-	int		fd;
-	char	*s;
-
-	fd = open("file.txt", O_RDONLY);
-	i = 0;
-	while (i < 100)
-	{
-		s = get_next_line(fd);
-		printf("%s", s);
-		i++;
-	}
-	// fd = open("gpt.txt", O_RDONLY);
-	// i = 0;
-	// while (i < 23)
-	// {
-	// 	s = get_next_line(fd);
-	// 	printf("%s", s);
-	// 	i++;
-	// }
 }
