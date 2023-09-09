@@ -6,7 +6,7 @@
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 15:21:47 by fcaldas-          #+#    #+#             */
-/*   Updated: 2023/09/09 17:38:27 by nasser           ###   ########.fr       */
+/*   Updated: 2023/09/09 17:42:15 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static char	*clean_buffer(char *buffer);
 static char	*ft_strjoin(const char *s1, const char *s2);
 static char	*read_line(int fd, char *line);
-static char	*treat_line(char *remains, char *line);
+static char	*treat_line(char *cache, char *line);
 
 char	*get_next_line(int fd)
 {
-	static char	*remains[1024];
+	static char	*cache[1024];
 	char		*line;
 
 	if (!BUFFER_SIZE || fd < 0)
@@ -30,18 +30,18 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
-	if (remains[fd])
+	if (cache[fd])
 	{
-		line = ft_strjoin(line, remains[fd]);
-		free(remains[fd]);
-		remains[fd] = NULL;
+		line = ft_strjoin(line, cache[fd]);
+		free(cache[fd]);
+		cache[fd] = NULL;
 	}
 	line = read_line(fd, line);
 	if (!line)
 		return (NULL);
 	if (ft_strchr(line, '\n'))
-		remains[fd] = ft_strdup(ft_strchr(line, '\n') + 1);
-	return (treat_line(remains[fd], line));
+		cache[fd] = ft_strdup(ft_strchr(line, '\n') + 1);
+	return (treat_line(cache[fd], line));
 }
 
 static char	*read_line(int fd, char *line)
@@ -70,21 +70,21 @@ static char	*read_line(int fd, char *line)
 	return (line);
 }
 
-static char	*treat_line(char *remains, char *line)
+static char	*treat_line(char *cache, char *line)
 {
 	char	*temp;
 
 	if (ft_strchr(line, '\n'))
 	{
 		temp = line;
-		line = ft_calloc(ft_strlen(temp) - ft_strlen(remains) + 1, 1);
+		line = ft_calloc(ft_strlen(temp) - ft_strlen(cache) + 1, 1);
 		if (!line)
 		{
 			free(line);
 			line = NULL;
 			return (NULL);
 		}
-		ft_strlcpy(line, temp, ft_strlen(temp) - ft_strlen(remains) + 1);
+		ft_strlcpy(line, temp, ft_strlen(temp) - ft_strlen(cache) + 1);
 		free(temp);
 		temp = NULL;
 		return (line);
