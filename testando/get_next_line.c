@@ -6,7 +6,7 @@
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 15:21:47 by fcaldas-          #+#    #+#             */
-/*   Updated: 2023/09/09 16:29:19 by nasser           ###   ########.fr       */
+/*   Updated: 2023/09/09 17:24:25 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,37 @@
 
 static char	*ft_strjoin(const char *s1, const char *s2);
 static char	*clean_buffer(char *buffer);
-static char	*read_line(int fd, char *blend);
-static char	*treat_line(char *remains, char *blend);
+static char	*read_line(int fd, char *line);
+static char	*treat_line(char *remains, char *line);
 
 char	*get_next_line(int fd)
 {
 	static char	*remains;
-	char		*blend;
+	char		*line;
 
 	if (!BUFFER_SIZE || fd < 0)
 		return (NULL);
-	blend = (char *)ft_calloc((1), sizeof(char));
-	if (!blend)
+	line = (char *)ft_calloc((1), sizeof(char));
+	if (!line)
 	{
-		free(blend);
+		free(line);
 		return (NULL);
 	}
 	if (remains)
 	{
-		blend = ft_strjoin(blend, remains);
+		line = ft_strjoin(line, remains);
 		free(remains);
 		remains = NULL;
 	}
-	blend = read_line(fd, blend);
-	if (!blend)
+	line = read_line(fd, line);
+	if (!line)
 		return (NULL);
-	if (ft_strchr(blend, '\n'))
-		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
-	return (treat_line(remains, blend));
+	if (ft_strchr(line, '\n'))
+		remains = ft_strdup(ft_strchr(line, '\n') + 1);
+	return (treat_line(remains, line));
 }
 
-static char	*read_line(int fd, char *blend)
+static char	*read_line(int fd, char *line)
 {
 	int		rd;
 	char	*buffer;
@@ -53,48 +53,48 @@ static char	*read_line(int fd, char *blend)
 	if (!buffer)
 		return (clean_buffer(buffer));
 	rd = BUFFER_SIZE;
-	while (!ft_strchr(blend, '\n') && rd != 0)
+	while (!ft_strchr(line, '\n') && rd != 0)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
 		if (rd < 0)
 		{
-			free(blend);
-			blend = NULL;
+			free(line);
+			line = NULL;
 			return (clean_buffer(buffer));
 		}
 		buffer[rd] = '\0';
-		blend = ft_strjoin(blend, buffer);
+		line = ft_strjoin(line, buffer);
 	}
 	free(buffer);
 	buffer = NULL;
-	return (blend);
+	return (line);
 }
 
-static char	*treat_line(char *remains, char *blend)
+static char	*treat_line(char *remains, char *line)
 {
 	char	*temp;
 
-	if (ft_strchr(blend, '\n'))
+	if (ft_strchr(line, '\n'))
 	{
-		temp = blend;
-		blend = ft_calloc(ft_strlen(temp) - ft_strlen(remains) + 1, 1);
-		if (!blend)
+		temp = line;
+		line = ft_calloc(ft_strlen(temp) - ft_strlen(remains) + 1, 1);
+		if (!line)
 		{
-			free(blend);
-			blend = NULL;
+			free(line);
+			line = NULL;
 			return (NULL);
 		}
-		ft_strlcpy(blend, temp, ft_strlen(temp) - ft_strlen(remains) + 1);
+		ft_strlcpy(line, temp, ft_strlen(temp) - ft_strlen(remains) + 1);
 		free(temp);
 		temp = NULL;
-		return (blend);
+		return (line);
 	}
-	else if (ft_strlen(blend))
-		return (blend);
+	else if (ft_strlen(line))
+		return (line);
 	else
 	{
-		free(blend);
-		blend = NULL;
+		free(line);
+		line = NULL;
 		return (NULL);
 	}
 }
