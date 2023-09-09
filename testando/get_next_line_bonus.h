@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/07 16:35:13 by fcaldas-          #+#    #+#             */
-/*   Updated: 2023/09/09 16:54:25 by nasser           ###   ########.fr       */
+/*   Created: 2023/08/15 15:22:58 by fcaldas-          #+#    #+#             */
+/*   Updated: 2023/09/09 16:33:29 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-#include <fcntl.h>
-#include <stdio.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 3
+# endif
 
-int	main(void)
-{
-	int		i;
-	int		fd;
-	char	*s;
+# include <unistd.h>
+# include <stdlib.h>
 
-	fd = open("file.txt", O_RDONLY);
-	i = 0;
-	while (i < 37)
-	{
-		s = get_next_line(fd);
-		printf("%s", s);
-		free(s);
-		i++;
-	}
-	return (0);
-}
+char	*get_next_line(int fd);
+size_t	ft_strlen(const char *str);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s);
+void	*ft_calloc(size_t nmemb, size_t size);
+
+#endif

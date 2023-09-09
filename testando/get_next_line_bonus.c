@@ -1,47 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nasser <nasser@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 15:21:47 by fcaldas-          #+#    #+#             */
-/*   Updated: 2023/09/09 16:29:19 by nasser           ###   ########.fr       */
+/*   Updated: 2023/09/09 17:00:34 by nasser           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-static char	*ft_strjoin(const char *s1, const char *s2);
-static char	*clean_buffer(char *buffer);
-static char	*read_line(int fd, char *blend);
-static char	*treat_line(char *remains, char *blend);
+// static char	*ft_strjoin(const char *s1, const char *s2);
+// static char	*clean_buffer(char *buffer);
+// static char	*read_line(int fd, char *blend);
+// static char	*treat_line(char *remains, char *blend);
 
-char	*get_next_line(int fd)
+static char	*clean_buffer(char *buffer)
 {
-	static char	*remains;
-	char		*blend;
+	free(buffer);
+	buffer = NULL;
+	return (NULL);
+}
 
-	if (!BUFFER_SIZE || fd < 0)
+static char	*ft_strjoin(const char *s1, const char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	if (!s1)
+		s1 = (char *)ft_calloc(1, sizeof(char));
+	if (!s1 || !s2)
 		return (NULL);
-	blend = (char *)ft_calloc((1), sizeof(char));
-	if (!blend)
+	str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
+	if (str == NULL)
 	{
-		free(blend);
+		free((void *)s1);
 		return (NULL);
 	}
-	if (remains)
-	{
-		blend = ft_strjoin(blend, remains);
-		free(remains);
-		remains = NULL;
-	}
-	blend = read_line(fd, blend);
-	if (!blend)
-		return (NULL);
-	if (ft_strchr(blend, '\n'))
-		remains = ft_strdup(ft_strchr(blend, '\n') + 1);
-	return (treat_line(remains, blend));
+	i = -1;
+	j = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[j] != '\0')
+		str[i++] = s2[j++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	free((void *)s1);
+	return (str);
 }
 
 static char	*read_line(int fd, char *blend)
@@ -99,37 +107,29 @@ static char	*treat_line(char *remains, char *blend)
 	}
 }
 
-static char	*clean_buffer(char *buffer)
+char	*get_next_line(int fd)
 {
-	free(buffer);
-	buffer = NULL;
-	return (NULL);
-}
+	static char	*remains[1024];
+	char		*blend;
 
-static char	*ft_strjoin(const char *s1, const char *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	if (!s1)
-		s1 = (char *)ft_calloc(1, sizeof(char));
-	if (!s1 || !s2)
+	if (!BUFFER_SIZE || fd < 0)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
-	if (str == NULL)
+	blend = (char *)ft_calloc((1), sizeof(char));
+	if (!blend)
 	{
-		free((void *)s1);
+		free(blend);
 		return (NULL);
 	}
-	i = -1;
-	j = 0;
-	if (s1)
-		while (s1[++i] != '\0')
-			str[i] = s1[i];
-	while (s2[j] != '\0')
-		str[i++] = s2[j++];
-	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
-	free((void *)s1);
-	return (str);
+	if (remains[fd])
+	{
+		blend = ft_strjoin(blend, remains[fd]);
+		free(remains[fd]);
+		remains[fd] = NULL;
+	}
+	blend = read_line(fd, blend);
+	if (!blend)
+		return (NULL);
+	if (ft_strchr(blend, '\n'))
+		remains[fd] = ft_strdup(ft_strchr(blend, '\n') + 1);
+	return (treat_line(remains[fd], blend));
 }

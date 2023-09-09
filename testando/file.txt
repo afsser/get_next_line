@@ -1,1 +1,36 @@
 1
+
+
+No contexto da extensao *, isso pode ser interpretado como um caractere curinga,
+o que significa que o arquivo possui um nome base, como norminette,
+seguido por quaisquer outros caracteres que podem variar.
+Isso pode ser usado para representar varios arquivos que tem nomes semelhantes,
+mas com extensoes diferentes, como norminette.py, norminette.sh etc.
+ 
+No contexto da extensao *, isso pode ser interpretado como um caractere curinga,
+o que significa que o arquivo possui um nome base, como norminette,
+seguido por quaisquer outros caracteres que podem variar.
+Isso pode ser usado para representar varios arquivos que tem nomes semelhantes,
+mas com extensoes diferentes, como norminette.py, norminette.sh etc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aaaaaaa
+
+.
