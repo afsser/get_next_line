@@ -2,7 +2,7 @@
 
 The **get_next_line** is the second 42school project. It is a function written in C that reads a line from a file descriptor and returns it.
 This project is designed to handle repeated calls, reading one line at a time, and managing variable buffer sizes.
-It is a fundamental exercise in file handling and memory management in C.
+It is a fundamental exercise in file handling and memory management in C, as it requires us to run the function with Valgrind, ensuring that no memory leaks occur.
 
 ## Function Overview
 
@@ -22,11 +22,10 @@ It is a fundamental exercise in file handling and memory management in C.
 - **Static Variable**: The use of a static variable enables the function to retain information between function calls, allowing it to continue reading from where it left off in the previous call.
 - **Memory Management**: The function dynamically allocates memory using `malloc` and frees it when no longer needed, ensuring efficient memory usage.
 
-## Restrictions
+## Project Restrictions
 
-- **Forbidden Functions**: The use of `lseek()` is not allowed, and you cannot use global variables. Additionally, the use of your own `libft` library is prohibited in this project.
+- **Forbidden Functions**: The use of `lseek()` is not allowed, and using global variables is forbidden. Additionally, the use of our own `libft` library is prohibited in this project.
 - **Binary File Behavior**: The function is not expected to handle binary files consistently, but a logical approach can be implemented if desired.
-- **Undefined Behavior**: If the file changes between calls to `get_next_line()` without reaching the end of the file, the behavior is undefined.
 
 ## Compilation
 
